@@ -4,5 +4,6 @@
     <string name="app_name">Smart Map</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="welcome_samrt_map">Welcome, to Smart Map</string>
 
 </resources>
