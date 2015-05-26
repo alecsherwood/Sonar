@@ -16,6 +16,7 @@ public class SmartMap extends ActionBarActivity {
         //Start Google Maps API
 
 
+
         //Retrieve current Location of user.
 
 
