@@ -14,4 +14,4 @@ To be a part of this project and submit code or ideas:
 ### Possible Other Functions
 * Determine the composition of an intersection and relay the information to the user.
 * Activate a walk signal via Bluetooth.
-
+* Determine which corner the user is on and indicate this information to them.
