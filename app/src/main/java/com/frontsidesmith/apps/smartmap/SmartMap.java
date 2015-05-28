@@ -12,6 +12,20 @@ public class SmartMap extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_map);
+
+        //Start Google Maps API
+
+
+
+        //Retrieve current Location of user.
+
+
+        //Retrieve current direction of user.
+
+
+        //determine if they are in front of a street.
+
+
     }
 
 
