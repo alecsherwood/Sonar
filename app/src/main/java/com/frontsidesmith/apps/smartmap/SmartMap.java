@@ -18,13 +18,16 @@ public class SmartMap extends ActionBarActivity {
 
 
         //Retrieve current Location of user.
+            //Continuously!
 
 
         //Retrieve current direction of user.
-
+            //Continuously!
 
         //determine if they are in front of a street.
 
+
+        //First alert.
 
     }
 
