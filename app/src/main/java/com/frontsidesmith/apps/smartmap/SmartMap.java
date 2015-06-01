@@ -31,12 +31,12 @@ public class SmartMap extends ActionBarActivity {
         //determine if they are in front of a street.
 
 
-        //First alert.
             //Subtle Vibration Alert
-                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE); // Setup vibrator.
-                v.vibrate(500);
-        //Second Alert
-                v.vibrate(500);
+                Vibrator v; // Setup vibrator.
+                 v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(500); // First alert
+        /* Second Alert */
+                v.vibrate(500); //Second alert
                 v.vibrate(1000);
 
 
