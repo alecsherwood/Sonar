@@ -1,6 +1,9 @@
 package com.frontsidesmith.apps.smartmap;
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,7 +26,10 @@ public class SmartMap extends ActionBarActivity {
 
         //Retrieve current Location of user.
             //Continuously!
+        LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,
+                1, mLocationListener);
 
         //Retrieve current direction of user.
             //Continuously!
@@ -41,6 +47,31 @@ public class SmartMap extends ActionBarActivity {
 
 
     }
+
+
+    //Location Listener
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            //your code here
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+                //Leverage Google Maps.
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
 
 
     @Override
