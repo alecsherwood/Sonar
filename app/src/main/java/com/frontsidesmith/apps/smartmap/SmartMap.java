@@ -1,12 +1,16 @@
 package com.frontsidesmith.apps.smartmap;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.os.Vibrator;
 
 
 public class SmartMap extends ActionBarActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,13 @@ public class SmartMap extends ActionBarActivity {
 
 
         //First alert.
+            //Subtle Vibration Alert
+                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE); // Setup vibrator.
+                v.vibrate(500);
+        //Second Alert
+                v.vibrate(500);
+                v.vibrate(1000);
+
 
     }
 
