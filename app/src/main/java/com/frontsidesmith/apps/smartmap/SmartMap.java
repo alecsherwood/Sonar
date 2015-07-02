@@ -1,17 +1,34 @@
 package com.frontsidesmith.apps.smartmap;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.os.Vibrator;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class SmartMap extends ActionBarActivity {
+
+    private Button pushToTalk;
+    private TextView speechToText;
+    private TextToSpeech tts;
 
 
 
@@ -46,8 +63,70 @@ public class SmartMap extends ActionBarActivity {
                 v.vibrate(1000);
 
 
+
+        //Speech Recognition
+            pushToTalk = (Button) findViewById(R.id.push_to_talk); //Grabs button from XML
+
+            pushToTalk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-us");
+
+                    try{
+                        startActivityForResult(intent, 1);
+                    }
+                    catch(ActivityNotFoundException e){
+                        //Device not supported
+                        Toast toast = Toast.makeText(getApplicationContext(), "This Device is does not support Speech to Text", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+            });
+
+
+
     }
 
+
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+            case 1: {
+                if(data != null) {
+                    ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                    speechToText = (TextView) findViewById(R.id.text_to_speech_text_view);
+
+                    final String capturedText = text.get(0);
+
+                    speechToText.setText(capturedText);
+
+                     //Text To Speech
+                        tts = new TextToSpeech(SmartMap.this, new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR){
+                                    tts.setLanguage(Locale.US);
+                                        speakText(capturedText);
+                                }
+
+                            }
+                        });
+                }
+            }
+        }
+    }
+
+    public void speakText(String text){
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
 
     //Location Listener
     private final LocationListener mLocationListener = new LocationListener() {
@@ -72,6 +151,18 @@ public class SmartMap extends ActionBarActivity {
         }
     };
 
+
+
+   @Override
+    protected void onPause() {
+        if(tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+
+       super.onPause();
+
+    }
 
 
     @Override
