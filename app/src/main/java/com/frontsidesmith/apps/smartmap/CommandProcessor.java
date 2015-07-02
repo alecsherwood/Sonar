@@ -5,23 +5,22 @@ import java.util.ArrayList;
 /**
  * Created by alec on 7/2/15.
  */
-public class CommandProcessor {
+public class CommandProcessor extends Commands {
 
     private String intake;
     private String result;
     private String command;
     private int commandId = -1;
 
-    private ArrayList<String> commands = new ArrayList<String>();
-
     public CommandProcessor(String command) {
         this.command = command;
+        super.collectCommands();
     }
 
     public int findCommand(String command){
 
-        for(int i = 0; i <= commands.size(); i++){
-            if(command.equals(commands.get(i))){
+        for(int i = 0; i <= super.commandList.size(); i++){
+            if(command.equals(commandList.get(i))){
                 commandId = i;
             }
         }
