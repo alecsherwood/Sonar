@@ -7,4 +7,8 @@
     <string name="welcome_samrt_map">Welcome, to Smart Map</string>
     <string name="push_to_talk">Push To Talk</string>
 
+
+    //Commands
+    <string name="command_where_am_I">Where am I</string>
+
 </resources>
