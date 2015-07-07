@@ -5,8 +5,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="welcome_samrt_map">Welcome, to Smart Map</string>
-    <string name="push_to_talk">Push To Talk</string>
 
+
+
+    //Buttons
+    <string name="push_for_location">Push for Location</string>
+    <string name="push_to_talk">Push To Talk</string>
 
     //Commands
     <string name="command_where_am_I">Where am I</string>

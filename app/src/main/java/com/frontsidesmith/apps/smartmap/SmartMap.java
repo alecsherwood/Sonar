@@ -3,6 +3,9 @@ package com.frontsidesmith.apps.smartmap;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,15 +23,22 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
 public class SmartMap extends ActionBarActivity {
 
     private Button pushToTalk;
+    private Button pushForLocation;
+
     private TextView speechToText;
     private TextToSpeech tts;
+
+    private String locationName = null;
+    private String fullAddress = null;
 
 
 
@@ -41,12 +51,58 @@ public class SmartMap extends ActionBarActivity {
 
 
 
-        //Retrieve current Location of user.
-            //Continuously!
-        LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,
-                1, mLocationListener);
+        //Retrieve current Location of user.
+        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        //Location Listener
+        final LocationListener mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(final Location location) {
+
+                LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                String provider = locationManager.getBestProvider(new Criteria(), true);
+
+                Location locations = locationManager.getLastKnownLocation(provider);
+                if(null!=locations){
+                    double longitude = locations.getLongitude();
+                    double latitude = locations.getLatitude();
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    try {
+                        List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
+                        if(null!=listAddresses&&listAddresses.size()>0){
+                            String _Location = listAddresses.get(0).getAddressLine(0);
+                            locationName = _Location;
+                            fullAddress = locationName + listAddresses.get(0).getAddressLine(1);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                //Leverage Google Maps.
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 1, mLocationListener);
+
+
+
+
 
         //Retrieve current direction of user.
             //Continuously!
@@ -54,7 +110,7 @@ public class SmartMap extends ActionBarActivity {
         //determine if they are in front of a street.
 
 
-            //Subtle Vibration Alert
+           //Subtle Vibration Alert
                 Vibrator v; // Setup vibrator.
                  v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(500); // First alert
@@ -85,6 +141,31 @@ public class SmartMap extends ActionBarActivity {
                 }
             });
 
+
+        //Push for location
+            pushForLocation = (Button) findViewById(R.id.location_button);
+
+            pushForLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(locationName != null){
+                        //Text To Speech
+                        tts = new TextToSpeech(SmartMap.this, new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR){
+                                    tts.setLanguage(Locale.US);
+                                    if(locationName != null){
+                                        speakText(locationName);
+                                    }
+                                }
+
+                            }
+                        });
+
+                    }
+                }
+            });
 
 
     }
@@ -128,28 +209,7 @@ public class SmartMap extends ActionBarActivity {
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    //Location Listener
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(final Location location) {
-            //your code here
-        }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-                //Leverage Google Maps.
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };
 
 
 
